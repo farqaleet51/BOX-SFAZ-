@@ -3,46 +3,640 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BTC/USD Live Chart</title>
+  <title>Trading Chart</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --ios-bg: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+      --ios-card: rgba(255, 255, 255, 0.08);
+      --ios-card-border: rgba(255, 255, 255, 0.12);
+      --ios-primary: #007AFF;
+      --ios-secondary: #5856D6;
+      --ios-success: #34C759;
+      --ios-danger: #FF3B30;
+      --ios-text: #FFFFFF;
+      --ios-text-secondary: rgba(255, 255, 255, 0.7);
+      --ios-blur: blur(20px);
+      --ios-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+    
     body {
       margin: 0;
-      background-color: #0d1117;
-      color: white;
-      font-family: Arial, sans-serif;
+      background: var(--ios-bg);
+      color: var(--ios-text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    
+    .container {
+      display: flex;
+      min-height: 100vh;
+      padding: 20px;
+      gap: 20px;
+    }
+    
+    .chart-section {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .ai-section {
+      flex: 1;
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    /* iOS Cards */
+    .ios-card {
+      background: var(--ios-card);
+      backdrop-filter: var(--ios-blur);
+      border: 1px solid var(--ios-card-border);
+      border-radius: 20px;
+      box-shadow: var(--ios-shadow);
+      overflow: hidden;
+    }
+    
+    .header-card {
+      padding: 24px;
       text-align: center;
     }
+    
     h1 {
-      padding: 20px;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--ios-text) 0%, var(--ios-text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--ios-text-secondary);
+      font-size: 16px;
+      font-weight: 400;
+    }
+    
+    /* Search Container */
+    .search-container {
+      padding: 24px;
+    }
+    
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    input[type="text"] {
+      flex: 1;
+      padding: 16px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--ios-card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--ios-text);
+      font-size: 16px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--ios-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    input[type="text"]::placeholder {
+      color: var(--ios-text-secondary);
+    }
+    
+    .ios-button {
+      padding: 16px 24px;
+      border-radius: 14px;
+      border: none;
+      background: var(--ios-primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .ios-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+    }
+    
+    .ios-button:active {
+      transform: translateY(0);
+    }
+    
+    .current-symbol {
+      margin: 16px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ios-primary);
+      text-align: center;
+    }
+    
+    .error-message {
+      color: var(--ios-danger);
+      margin: 12px 0;
+      min-height: 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .tradingview-widget-container {
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      min-height: 500px;
+    }
+    
+    .examples {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--ios-text-secondary);
+      text-align: center;
+    }
+    
+    .examples span {
+      display: inline-block;
+      margin: 0 6px;
+      cursor: pointer;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .examples span:hover {
+      background: var(--ios-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+    
+    /* Trading Demo Styles */
+    .trading-demo {
+      padding: 24px;
+    }
+    
+    .demo-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: var(--ios-text);
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .demo-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .demo-input {
+      flex: 1;
+      min-width: 120px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--ios-card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--ios-text);
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .demo-input:focus {
+      outline: none;
+      border-color: var(--ios-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .buy-btn {
+      background: var(--ios-success);
+      padding: 14px 20px;
+    }
+    
+    .buy-btn:hover {
+      background: #30a14e;
+      box-shadow: 0 6px 20px rgba(52, 199, 89, 0.3);
+    }
+    
+    .sell-btn {
+      background: var(--ios-danger);
+      padding: 14px 20px;
+    }
+    
+    .sell-btn:hover {
+      background: #d70015;
+      box-shadow: 0 6px 20px rgba(255, 59, 48, 0.3);
+    }
+    
+    /* AI Chat Styles */
+    .ai-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--ios-text);
+      font-weight: 600;
+    }
+    
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(100vh - 280px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .message {
+      padding: 16px 20px;
+      border-radius: 18px;
+      max-width: 85%;
+      line-height: 1.4;
+      position: relative;
+      animation: messageAppear 0.3s ease-out;
+    }
+    
+    @keyframes messageAppear {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .user-message {
+      background: var(--ios-primary);
+      margin-left: auto;
+      border-bottom-right-radius: 6px;
+    }
+    
+    .ai-message {
+      background: rgba(255, 255, 255, 0.1);
+      border-bottom-left-radius: 6px;
+    }
+    
+    .chat-input-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: calc(25% - 40px);
+      min-width: 300px;
+      display: flex;
+      padding: 16px;
+      background: var(--ios-card);
+      backdrop-filter: var(--ios-blur);
+      border: 1px solid var(--ios-card-border);
+      border-radius: 20px;
+      box-shadow: var(--ios-shadow);
+      z-index: 100;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--ios-card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--ios-text);
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--ios-primary);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .chat-send {
+      margin-left: 12px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: none;
+      background: var(--ios-primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-send:hover {
+      background: #0066cc;
+      transform: translateY(-1px);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+      }
+      
+      .ai-section {
+        min-width: auto;
+      }
+      
+      .demo-controls {
+        flex-direction: column;
+      }
+      
+      .chat-input-container {
+        width: calc(100% - 40px);
+        right: 20px;
+        left: 20px;
+        min-width: auto;
+      }
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--ios-primary);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0066cc;
     }
   </style>
 </head>
 <body>
-  <h1>Bitcoin (BTC) to USD - Live Chart</h1>
+  <div class="container">
+    <div class="chart-section">
+      <!-- Header Card -->
+      <div class="ios-card header-card">
+        <h1>Trading Chart</h1>
+        <div class="subtitle">Real-time market analysis</div>
+      </div>
 
-  <!-- TradingView Widget BEGIN -->
-  <div class="tradingview-widget-container">
-    <div id="tradingview_btcusd"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
+      <!-- TradingView Widget -->
+      <div class="ios-card tradingview-widget-container">
+        <div id="tradingview_chart"></div>
+      </div>
+      
+      <!-- Search & Controls -->
+      <div class="ios-card search-container">
+        <div class="search-box">
+          <input type="text" id="symbolInput" placeholder="Search AAPL, ETH, EUR/USD..." autocomplete="off">
+          <button class="ios-button" id="searchButton">
+            <span>Search</span>
+          </button>
+        </div>
+        <div class="error-message" id="errorMessage"></div>
+        <div class="current-symbol" id="currentSymbol">BITSTAMP:BTCUSD</div>
+        <div class="examples">
+          Try: 
+          <span onclick="searchSymbol('AAPL')">AAPL</span> 
+          <span onclick="searchSymbol('ETH')">ETH</span> 
+          <span onclick="searchSymbol('TSLA')">TSLA</span> 
+          <span onclick="searchSymbol('EURUSD')">EUR/USD</span> 
+          <span onclick="searchSymbol('BTCUSD')">BTC</span>
+          <span onclick="searchSymbol('GOLD')">GOLD</span>
+        </div>
+        
+        <!-- Trading Demo Section -->
+        <div class="trading-demo">
+          <div class="demo-title">Trading Controls</div>
+          
+          <div class="demo-controls">
+            <input type="number" id="quantityInput" class="demo-input" placeholder="Quantity" value="1" min="1">
+            <input type="number" id="priceInput" class="demo-input" placeholder="Price" step="0.01">
+            <button class="ios-button buy-btn" id="buyButton">Buy</button>
+            <button class="ios-button sell-btn" id="sellButton">Sell</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- AI Assistant Section -->
+    <div class="ai-section">
+      <div class="ios-card" style="padding: 24px;">
+        <div class="ai-title">Trading Assistant</div>
+        
+        <div class="chat-container">
+          <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+              Welcome! I'm here to help with your trading analysis. Ask me anything about the markets.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Chat Input -->
+  <div class="chat-input-container">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Message Trading Assistant...">
+    <button class="chat-send" id="chatSend">Send</button>
+  </div>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    // Default symbol
+    let currentSymbol = "BITSTAMP:BTCUSD";
+    
+    // Initialize the TradingView widget
+    function initTradingView(symbol) {
+      // Remove existing widget if present
+      const container = document.getElementById('tradingview_chart');
+      container.innerHTML = '';
+      
+      // Create new widget
       new TradingView.widget({
         "width": "100%",
-        "height": 600,
-        "symbol": "BITSTAMP:BTCUSD",
+        "height": "100%",
+        "symbol": symbol,
         "interval": "1",
         "timezone": "Etc/UTC",
         "theme": "dark",
         "style": "1",
         "locale": "en",
-        "toolbar_bg": "#f1f3f6",
+        "toolbar_bg": "#1b263b",
         "enable_publishing": false,
         "hide_legend": false,
         "save_image": false,
-        "container_id": "tradingview_btcusd"
+        "studies": ["RSI@tv-basicstudies", "Volume@tv-basicstudies"],
+        "container_id": "tradingview_chart",
+        "overrides": {
+          "paneProperties.background": "#0d1b2a",
+          "paneProperties.vertGridProperties.color": "rgba(255,255,255,0.05)",
+          "paneProperties.horzGridProperties.color": "rgba(255,255,255,0.05)"
+        }
       });
-    </script>
-  </div>
-  <!-- TradingView Widget END -->
-
+      
+      // Update current symbol display
+      document.getElementById('currentSymbol').textContent = symbol;
+    }
+    
+    // Search for a symbol
+    function searchSymbol(symbol) {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = '';
+      
+      if (!symbol || symbol.trim() === '') {
+        errorMessage.textContent = 'Please enter a symbol to search.';
+        return;
+      }
+      
+      // Format the symbol for TradingView
+      let formattedSymbol = symbol.trim().toUpperCase();
+      
+      // Add exchange prefix for common symbols if not already specified
+      if (!formattedSymbol.includes(':')) {
+        if (formattedSymbol === 'BTC' || formattedSymbol === 'BTCUSD') {
+          formattedSymbol = 'BITSTAMP:BTCUSD';
+        } else if (formattedSymbol === 'ETH' || formattedSymbol === 'ETHUSD') {
+          formattedSymbol = 'BINANCE:ETHUSDT';
+        } else if (formattedSymbol === 'EURUSD') {
+          formattedSymbol = 'FX:EURUSD';
+        } else if (formattedSymbol === 'GOLD') {
+          formattedSymbol = 'TVC:GOLD';
+        } else if (formattedSymbol === 'SPX') {
+          formattedSymbol = 'SP:SPX';
+        } else {
+          formattedSymbol = `NASDAQ:${formattedSymbol}`;
+        }
+      }
+      
+      currentSymbol = formattedSymbol;
+      initTradingView(currentSymbol);
+    }
+    
+    // Trading Demo Functions
+    function buyAsset() {
+      const quantity = parseFloat(document.getElementById('quantityInput').value);
+      const priceInput = document.getElementById('priceInput').value;
+      
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+      }
+      
+      const symbolName = currentSymbol.split(':').pop();
+      const price = priceInput ? parseFloat(priceInput) : Math.random() * 1000 + 100;
+      
+      alert(`✅ Buy Order: ${quantity} ${symbolName} at $${price.toFixed(2)}`);
+    }
+    
+    function sellAsset() {
+      const quantity = parseFloat(document.getElementById('quantityInput').value);
+      const priceInput = document.getElementById('priceInput').value;
+      const symbolName = currentSymbol.split(':').pop();
+      
+      if (isNaN(quantity) || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+      }
+      
+      const price = priceInput ? parseFloat(priceInput) : Math.random() * 1000 + 100;
+      
+      alert(`🔻 Sell Order: ${quantity} ${symbolName} at $${price.toFixed(2)}`);
+    }
+    
+    // AI Chat functionality
+    function askAI(question) {
+      const chatMessages = document.getElementById('chatMessages');
+      const chatInput = document.getElementById('chatInput');
+      
+      // Add user message
+      const userMessage = document.createElement('div');
+      userMessage.className = 'message user-message';
+      userMessage.textContent = question;
+      chatMessages.appendChild(userMessage);
+      
+      // Clear input
+      chatInput.value = '';
+      
+      // Scroll to bottom
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Simulate AI thinking
+      setTimeout(() => {
+        const aiMessage = document.createElement('div');
+        aiMessage.className = 'message ai-message';
+        aiMessage.textContent = 'AI assistant is ready for integration. Connect to your preferred AI service for real responses.';
+        chatMessages.appendChild(aiMessage);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 800);
+    }
+    
+    // Initialize with default symbol
+    document.addEventListener('DOMContentLoaded', function() {
+      initTradingView(currentSymbol);
+      
+      // Set up search button click handler
+      document.getElementById('searchButton').addEventListener('click', function() {
+        const symbolInput = document.getElementById('symbolInput');
+        searchSymbol(symbolInput.value);
+      });
+      
+      // Set up Enter key handler for search input
+      document.getElementById('symbolInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchSymbol(this.value);
+        }
+      });
+      
+      // Set up trading demo buttons
+      document.getElementById('buyButton').addEventListener('click', buyAsset);
+      document.getElementById('sellButton').addEventListener('click', sellAsset);
+      
+      // Set up chat functionality
+      document.getElementById('chatSend').addEventListener('click', function() {
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput.value.trim() !== '') {
+          askAI(chatInput.value);
+        }
+      });
+      
+      document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          if (this.value.trim() !== '') {
+            askAI(this.value);
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
