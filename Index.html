@@ -24,6 +24,19 @@
       --ios-blur: blur(20px);
       --ios-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
+
+    :root[data-theme="light"] {
+      --ios-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --ios-card: rgba(255, 255, 255, 0.9);
+      --ios-card-border: rgba(0, 0, 0, 0.1);
+      --ios-primary: #007AFF;
+      --ios-secondary: #5856D6;
+      --ios-success: #34C759;
+      --ios-danger: #FF3B30;
+      --ios-text: #1d1d1f;
+      --ios-text-secondary: rgba(0, 0, 0, 0.6);
+      --ios-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
     
     body {
       margin: 0;
@@ -32,28 +45,68 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
       overflow-x: hidden;
       min-height: 100vh;
+      padding: 10px;
+      transition: all 0.3s ease;
     }
     
     .container {
       display: flex;
-      min-height: 100vh;
-      padding: 20px;
-      gap: 20px;
+      min-height: calc(100vh - 20px);
+      gap: 15px;
     }
     
     .chart-section {
       flex: 3;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
     }
     
     .ai-section {
       flex: 1;
-      min-width: 320px;
+      min-width: 280px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
+    }
+    
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .theme-toggle-btn {
+      width: 50px;
+      height: 50px;
+      background: var(--ios-card);
+      backdrop-filter: var(--ios-blur);
+      border: 1px solid var(--ios-card-border);
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--ios-shadow);
+    }
+    
+    .theme-toggle-btn:hover {
+      background: var(--ios-primary);
+      transform: scale(1.1);
+    }
+    
+    .theme-toggle-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--ios-text);
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle-btn:hover svg {
+      fill: white;
     }
     
     /* iOS Cards */
@@ -61,142 +114,21 @@
       background: var(--ios-card);
       backdrop-filter: var(--ios-blur);
       border: 1px solid var(--ios-card-border);
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: var(--ios-shadow);
       overflow: hidden;
-    }
-    
-    .header-card {
-      padding: 24px;
-      text-align: center;
-    }
-    
-    h1 {
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--ios-text) 0%, var(--ios-text-secondary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-    
-    .subtitle {
-      color: var(--ios-text-secondary);
-      font-size: 16px;
-      font-weight: 400;
-    }
-    
-    /* Search Container */
-    .search-container {
-      padding: 24px;
-    }
-    
-    .search-box {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    
-    input[type="text"] {
-      flex: 1;
-      padding: 16px 20px;
-      border-radius: 14px;
-      border: 1px solid var(--ios-card-border);
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--ios-text);
-      font-size: 16px;
-      font-weight: 400;
       transition: all 0.3s ease;
     }
     
-    input[type="text"]:focus {
-      outline: none;
-      border-color: var(--ios-primary);
-      background: rgba(255, 255, 255, 0.08);
-    }
-    
-    input[type="text"]::placeholder {
-      color: var(--ios-text-secondary);
-    }
-    
-    .ios-button {
-      padding: 16px 24px;
-      border-radius: 14px;
-      border: none;
-      background: var(--ios-primary);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .ios-button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
-    }
-    
-    .ios-button:active {
-      transform: translateY(0);
-    }
-    
-    .current-symbol {
-      margin: 16px 0;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--ios-primary);
-      text-align: center;
-    }
-    
-    .error-message {
-      color: var(--ios-danger);
-      margin: 12px 0;
-      min-height: 20px;
-      text-align: center;
-      font-weight: 500;
-    }
-    
-    .tradingview-widget-container {
-      flex: 1;
-      border-radius: 20px;
-      overflow: hidden;
-      min-height: 500px;
-    }
-    
-    .examples {
-      margin-top: 20px;
-      font-size: 14px;
-      color: var(--ios-text-secondary);
-      text-align: center;
-    }
-    
-    .examples span {
-      display: inline-block;
-      margin: 0 6px;
-      cursor: pointer;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
-    
-    .examples span:hover {
-      background: var(--ios-primary);
-      color: white;
-      transform: translateY(-1px);
-    }
-    
-    /* Trading Demo Styles */
-    .trading-demo {
-      padding: 24px;
+    /* Combined Controls Section */
+    .combined-controls {
+      padding: 20px;
+      flex-shrink: 0;
     }
     
     .demo-title {
-      font-size: 20px;
-      margin-bottom: 20px;
+      font-size: 18px;
+      margin-bottom: 15px;
       color: var(--ios-text);
       text-align: center;
       font-weight: 600;
@@ -204,20 +136,20 @@
     
     .demo-controls {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
     
     .demo-input {
       flex: 1;
-      min-width: 120px;
-      padding: 14px 16px;
-      border-radius: 14px;
+      min-width: 100px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1px solid var(--ios-card-border);
       background: rgba(255, 255, 255, 0.05);
       color: var(--ios-text);
-      font-size: 16px;
+      font-size: 14px;
       transition: all 0.3s ease;
     }
     
@@ -229,7 +161,8 @@
     
     .buy-btn {
       background: var(--ios-success);
-      padding: 14px 20px;
+      padding: 12px 18px;
+      font-size: 14px;
     }
     
     .buy-btn:hover {
@@ -239,7 +172,8 @@
     
     .sell-btn {
       background: var(--ios-danger);
-      padding: 14px 20px;
+      padding: 12px 18px;
+      font-size: 14px;
     }
     
     .sell-btn:hover {
@@ -247,10 +181,108 @@
       box-shadow: 0 6px 20px rgba(255, 59, 48, 0.3);
     }
     
+    .ios-button {
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: none;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .ios-button:hover {
+      transform: translateY(-1px);
+    }
+    
+    /* Transaction History */
+    .history-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: var(--ios-text);
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .history-list {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--ios-card-border);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      font-size: 13px;
+    }
+    
+    .transaction-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+    
+    .transaction-details {
+      flex: 1;
+    }
+    
+    .transaction-symbol {
+      font-weight: 600;
+      color: var(--ios-text);
+      margin-bottom: 2px;
+      font-size: 13px;
+    }
+    
+    .transaction-type {
+      font-size: 11px;
+      color: var(--ios-text-secondary);
+    }
+    
+    .transaction-amount {
+      text-align: right;
+    }
+    
+    .transaction-quantity {
+      font-weight: 600;
+      color: var(--ios-text);
+      margin-bottom: 2px;
+      font-size: 13px;
+    }
+    
+    .transaction-price {
+      font-size: 11px;
+      color: var(--ios-text-secondary);
+    }
+    
+    .transaction-buy {
+      border-left: 4px solid var(--ios-success);
+    }
+    
+    .transaction-sell {
+      border-left: 4px solid var(--ios-danger);
+    }
+    
+    /* Extended Graph Container */
+    .tradingview-widget-container {
+      flex: 1;
+      border-radius: 0;
+      overflow: hidden;
+      min-height: 550px;
+    }
+    
     /* AI Chat Styles */
     .ai-title {
-      font-size: 22px;
-      margin-bottom: 20px;
+      font-size: 20px;
+      margin-bottom: 15px;
       text-align: center;
       color: var(--ios-text);
       font-weight: 600;
@@ -260,28 +292,29 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
       position: relative;
     }
     
     .chat-messages {
       flex: 1;
-      padding: 24px;
+      padding: 20px;
       overflow-y: auto;
-      max-height: calc(100vh - 280px);
+      max-height: 250px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
     
     .message {
-      padding: 16px 20px;
-      border-radius: 18px;
+      padding: 12px 16px;
+      border-radius: 16px;
       max-width: 85%;
       line-height: 1.4;
       position: relative;
       animation: messageAppear 0.3s ease-out;
+      font-size: 14px;
     }
     
     @keyframes messageAppear {
@@ -308,28 +341,28 @@
     
     .chat-input-container {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: calc(25% - 40px);
-      min-width: 300px;
+      bottom: 15px;
+      right: 15px;
+      width: calc(25% - 30px);
+      min-width: 250px;
       display: flex;
-      padding: 16px;
+      padding: 12px;
       background: var(--ios-card);
       backdrop-filter: var(--ios-blur);
       border: 1px solid var(--ios-card-border);
-      border-radius: 20px;
+      border-radius: 16px;
       box-shadow: var(--ios-shadow);
       z-index: 100;
     }
     
     .chat-input {
       flex: 1;
-      padding: 14px 16px;
-      border-radius: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1px solid var(--ios-card-border);
       background: rgba(255, 255, 255, 0.05);
       color: var(--ios-text);
-      font-size: 16px;
+      font-size: 14px;
       transition: all 0.3s ease;
     }
     
@@ -340,14 +373,15 @@
     }
     
     .chat-send {
-      margin-left: 12px;
-      padding: 14px 20px;
-      border-radius: 14px;
+      margin-left: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
       border: none;
       background: var(--ios-primary);
       color: white;
       cursor: pointer;
       font-weight: 600;
+      font-size: 14px;
       transition: all 0.3s ease;
     }
     
@@ -360,8 +394,7 @@
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
-        padding: 10px;
-        gap: 15px;
+        gap: 10px;
       }
       
       .ai-section {
@@ -373,26 +406,40 @@
       }
       
       .chat-input-container {
-        width: calc(100% - 40px);
-        right: 20px;
-        left: 20px;
+        width: calc(100% - 30px);
+        right: 15px;
+        left: 15px;
         min-width: auto;
+      }
+      
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+      }
+      
+      .theme-toggle-btn {
+        width: 44px;
+        height: 44px;
+      }
+      
+      .tradingview-widget-container {
+        min-height: 400px;
       }
     }
     
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
     }
     
     ::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 3px;
+      border-radius: 2px;
     }
     
     ::-webkit-scrollbar-thumb {
       background: var(--ios-primary);
-      border-radius: 3px;
+      border-radius: 2px;
     }
     
     ::-webkit-scrollbar-thumb:hover {
@@ -401,56 +448,43 @@
   </style>
 </head>
 <body>
+  <!-- Theme Toggle -->
+  <div class="theme-toggle">
+    <div class="theme-toggle-btn" id="themeToggle">
+      <svg id="themeIcon" viewBox="0 0 24 24">
+        <path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1 S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2 c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M6.34,7.16 l-1.42-1.42c-0.39-0.39-1.02-0.39-1.41,0c-0.39,0.39-0.39,1.02,0,1.41l1.42,1.42c0.39,0.39,1.02,0.39,1.41,0 C6.73,8.18,6.73,7.55,6.34,7.16z M19.08,18.92c-0.39,0.39-1.02,0.39-1.41,0l-1.42-1.42c-0.39-0.39-0.39-1.02,0-1.41 c0.39-0.39,1.02-0.39,1.41,0l1.42,1.42C19.47,17.9,19.47,18.53,19.08,18.92z M7.16,17.66c0.39,0.39,1.02,0.39,1.41,0 c0.39-0.39,0.39-1.02,0-1.41l-1.42-1.42c-0.39-0.39-1.02-0.39-1.41,0c-0.39,0.39-0.39,1.02,0,1.41L7.16,17.66z M18.92,5.08 c0.39,0.39,0.39,1.02,0,1.41l-1.42,1.42c-0.39,0.39-1.02,0.39-1.41,0c-0.39-0.39-0.39-1.02,0-1.41l1.42-1.42 C17.9,4.69,18.53,4.69,18.92,5.08z"/>
+      </svg>
+    </div>
+  </div>
+
   <div class="container">
     <div class="chart-section">
-      <!-- Header Card -->
-      <div class="ios-card header-card">
-        <h1>Trading Chart</h1>
-        <div class="subtitle">Real-time market analysis</div>
-      </div>
-
-      <!-- TradingView Widget -->
+      <!-- TradingView Widget with Built-in Search -->
       <div class="ios-card tradingview-widget-container">
         <div id="tradingview_chart"></div>
       </div>
       
-      <!-- Search & Controls -->
-      <div class="ios-card search-container">
-        <div class="search-box">
-          <input type="text" id="symbolInput" placeholder="Search AAPL, ETH, EUR/USD..." autocomplete="off">
-          <button class="ios-button" id="searchButton">
-            <span>Search</span>
-          </button>
-        </div>
-        <div class="error-message" id="errorMessage"></div>
-        <div class="current-symbol" id="currentSymbol">BITSTAMP:BTCUSD</div>
-        <div class="examples">
-          Try: 
-          <span onclick="searchSymbol('AAPL')">AAPL</span> 
-          <span onclick="searchSymbol('ETH')">ETH</span> 
-          <span onclick="searchSymbol('TSLA')">TSLA</span> 
-          <span onclick="searchSymbol('EURUSD')">EUR/USD</span> 
-          <span onclick="searchSymbol('BTCUSD')">BTC</span>
-          <span onclick="searchSymbol('GOLD')">GOLD</span>
+      <!-- Combined Controls & History -->
+      <div class="ios-card combined-controls">
+        <div class="demo-title">Trading Controls</div>
+        
+        <div class="demo-controls">
+          <input type="number" id="quantityInput" class="demo-input" placeholder="Quantity" value="1" min="1">
+          <input type="number" id="priceInput" class="demo-input" placeholder="Price" step="0.01">
+          <button class="ios-button buy-btn" id="buyButton">Buy</button>
+          <button class="ios-button sell-btn" id="sellButton">Sell</button>
         </div>
         
-        <!-- Trading Demo Section -->
-        <div class="trading-demo">
-          <div class="demo-title">Trading Controls</div>
-          
-          <div class="demo-controls">
-            <input type="number" id="quantityInput" class="demo-input" placeholder="Quantity" value="1" min="1">
-            <input type="number" id="priceInput" class="demo-input" placeholder="Price" step="0.01">
-            <button class="ios-button buy-btn" id="buyButton">Buy</button>
-            <button class="ios-button sell-btn" id="sellButton">Sell</button>
-          </div>
+        <div class="history-title">Transaction History</div>
+        <div class="history-list" id="transactionList">
+          <!-- Transactions will be added here dynamically -->
         </div>
       </div>
     </div>
     
     <!-- AI Assistant Section -->
     <div class="ai-section">
-      <div class="ios-card" style="padding: 24px;">
+      <div class="ios-card" style="padding: 20px;">
         <div class="ai-title">Trading Assistant</div>
         
         <div class="chat-container">
@@ -474,72 +508,179 @@
   <script type="text/javascript">
     // Default symbol
     let currentSymbol = "BITSTAMP:BTCUSD";
-    
-    // Initialize the TradingView widget
+    let transactionHistory = [];
+    let currentTheme = 'dark';
+
+    // Local Storage Keys
+    const STORAGE_KEYS = {
+      TRANSACTIONS: 'trading_transactions',
+      THEME: 'trading_theme'
+    };
+
+    // Local Storage Functions
+    function saveToLocalStorage(key, data) {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+      } catch (error) {
+        console.error('Error saving to localStorage:', error);
+      }
+    }
+
+    function loadFromLocalStorage(key) {
+      try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+      } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        return null;
+      }
+    }
+
+    // Load saved data on page load
+    function loadSavedData() {
+      // Load theme
+      const savedTheme = loadFromLocalStorage(STORAGE_KEYS.THEME);
+      if (savedTheme) {
+        currentTheme = savedTheme;
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+      }
+
+      // Load transactions
+      const savedTransactions = loadFromLocalStorage(STORAGE_KEYS.TRANSACTIONS);
+      if (savedTransactions && Array.isArray(savedTransactions)) {
+        transactionHistory = savedTransactions;
+        updateTransactionHistory();
+      }
+    }
+
+    // Theme management
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      saveToLocalStorage(STORAGE_KEYS.THEME, currentTheme);
+      
+      // Update TradingView theme
+      if (window.tvWidget) {
+        window.tvWidget.remove();
+      }
+      initTradingView(currentSymbol);
+      
+      updateThemeIcon();
+    }
+
+    function updateThemeIcon() {
+      const themeIcon = document.getElementById('themeIcon');
+      if (currentTheme === 'light') {
+        themeIcon.innerHTML = '<path d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/>';
+      } else {
+        themeIcon.innerHTML = '<path d="M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5S14.76,7,12,7L12,7z M2,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H2c-0.55,0-1,0.45-1,1 S1.45,13,2,13z M20,13h2c0.55,0,1-0.45,1-1s-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2 c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M6.34,7.16 l-1.42-1.42c-0.39-0.39-1.02-0.39-1.41,0c-0.39,0.39-0.39,1.02,0,1.41l1.42,1.42c0.39,0.39,1.02,0.39,1.41,0 C6.73,8.18,6.73,7.55,6.34,7.16z M19.08,18.92c-0.39,0.39-1.02,0.39-1.41,0l-1.42-1.42c-0.39-0.39-0.39-1.02,0-1.41 c0.39-0.39,1.02-0.39,1.41,0l1.42,1.42C19.47,17.9,19.47,18.53,19.08,18.92z M7.16,17.66c0.39,0.39,1.02,0.39,1.41,0 c0.39-0.39,0.39-1.02,0-1.41l-1.42-1.42c-0.39-0.39-1.02-0.39-1.41,0c-0.39,0.39-0.39,1.02,0,1.41L7.16,17.66z M18.92,5.08 c0.39,0.39,0.39,1.02,0,1.41l-1.42,1.42c-0.39,0.39-1.02,0.39-1.41,0c-0.39-0.39-0.39-1.02,0-1.41l1.42-1.42 C17.9,4.69,18.53,4.69,18.92,5.08z"/>';
+      }
+    }
+
+    // Initialize the TradingView widget with built-in search
     function initTradingView(symbol) {
       // Remove existing widget if present
       const container = document.getElementById('tradingview_chart');
       container.innerHTML = '';
       
-      // Create new widget
-      new TradingView.widget({
+      // Create new widget with TradingView's default search enabled
+      window.tvWidget = new TradingView.widget({
         "width": "100%",
         "height": "100%",
         "symbol": symbol,
         "interval": "1",
         "timezone": "Etc/UTC",
-        "theme": "dark",
+        "theme": currentTheme,
         "style": "1",
         "locale": "en",
-        "toolbar_bg": "#1b263b",
+        "toolbar_bg": currentTheme === 'dark' ? "#1b263b" : "#f5f7fa",
         "enable_publishing": false,
+        "allow_symbol_change": true,
         "hide_legend": false,
         "save_image": false,
         "studies": ["RSI@tv-basicstudies", "Volume@tv-basicstudies"],
         "container_id": "tradingview_chart",
+        "show_popup_button": true,
+        "popup_width": "1000",
+        "popup_height": "650",
+        "watchlist": [
+          "BITSTAMP:BTCUSD",
+          "BINANCE:ETHUSDT", 
+          "NASDAQ:AAPL",
+          "NASDAQ:TSLA",
+          "TVC:GOLD",
+          "FX:EURUSD"
+        ],
+        "details": true,
+        "hotlist": true,
+        "calendar": true,
         "overrides": {
-          "paneProperties.background": "#0d1b2a",
-          "paneProperties.vertGridProperties.color": "rgba(255,255,255,0.05)",
-          "paneProperties.horzGridProperties.color": "rgba(255,255,255,0.05)"
+          "paneProperties.background": currentTheme === 'dark' ? "#0d1b2a" : "#ffffff",
+          "paneProperties.vertGridProperties.color": currentTheme === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+          "paneProperties.horzGridProperties.color": currentTheme === 'dark' ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+          "mainSeriesProperties.candleStyle.upColor": "#34C759",
+          "mainSeriesProperties.candleStyle.downColor": "#FF3B30",
+          "mainSeriesProperties.candleStyle.borderUpColor": "#34C759",
+          "mainSeriesProperties.candleStyle.borderDownColor": "#FF3B30",
+          "mainSeriesProperties.candleStyle.wickUpColor": "#34C759",
+          "mainSeriesProperties.candleStyle.wickDownColor": "#FF3B30"
+        },
+        "studies_overrides": {
+          "volume.volume.color.0": "#FF3B30",
+          "volume.volume.color.1": "#34C759",
+          "volume.volume.transparency": 70,
+          "volume.volume ma.color": "#007AFF",
+          "rsi.display": "line",
+          "rsi.linecolor": "#5856D6"
         }
       });
-      
-      // Update current symbol display
-      document.getElementById('currentSymbol').textContent = symbol;
     }
     
-    // Search for a symbol
-    function searchSymbol(symbol) {
-      const errorMessage = document.getElementById('errorMessage');
-      errorMessage.textContent = '';
+    // Add transaction to history
+    function addTransaction(type, quantity, price) {
+      const transaction = {
+        id: Date.now(),
+        type: type,
+        symbol: currentSymbol.split(':').pop(),
+        quantity: quantity,
+        price: price,
+        timestamp: new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString()
+      };
       
-      if (!symbol || symbol.trim() === '') {
-        errorMessage.textContent = 'Please enter a symbol to search.';
+      transactionHistory.unshift(transaction);
+      saveToLocalStorage(STORAGE_KEYS.TRANSACTIONS, transactionHistory);
+      updateTransactionHistory();
+    }
+    
+    // Update transaction history display
+    function updateTransactionHistory() {
+      const transactionList = document.getElementById('transactionList');
+      transactionList.innerHTML = '';
+      
+      if (transactionHistory.length === 0) {
+        transactionList.innerHTML = '<div style="text-align: center; color: var(--ios-text-secondary); padding: 20px; font-size: 14px;">No transactions yet</div>';
         return;
       }
       
-      // Format the symbol for TradingView
-      let formattedSymbol = symbol.trim().toUpperCase();
-      
-      // Add exchange prefix for common symbols if not already specified
-      if (!formattedSymbol.includes(':')) {
-        if (formattedSymbol === 'BTC' || formattedSymbol === 'BTCUSD') {
-          formattedSymbol = 'BITSTAMP:BTCUSD';
-        } else if (formattedSymbol === 'ETH' || formattedSymbol === 'ETHUSD') {
-          formattedSymbol = 'BINANCE:ETHUSDT';
-        } else if (formattedSymbol === 'EURUSD') {
-          formattedSymbol = 'FX:EURUSD';
-        } else if (formattedSymbol === 'GOLD') {
-          formattedSymbol = 'TVC:GOLD';
-        } else if (formattedSymbol === 'SPX') {
-          formattedSymbol = 'SP:SPX';
-        } else {
-          formattedSymbol = `NASDAQ:${formattedSymbol}`;
-        }
-      }
-      
-      currentSymbol = formattedSymbol;
-      initTradingView(currentSymbol);
+      transactionHistory.forEach(transaction => {
+        const transactionItem = document.createElement('div');
+        transactionItem.className = `transaction-item ${transaction.type === 'buy' ? 'transaction-buy' : 'transaction-sell'}`;
+        
+        transactionItem.innerHTML = `
+          <div class="transaction-details">
+            <div class="transaction-symbol">${transaction.symbol}</div>
+            <div class="transaction-type">${transaction.type.toUpperCase()} • ${transaction.timestamp}</div>
+          </div>
+          <div class="transaction-amount">
+            <div class="transaction-quantity">${transaction.quantity} shares</div>
+            <div class="transaction-price">$${transaction.price.toFixed(2)}</div>
+          </div>
+        `;
+        
+        transactionList.appendChild(transactionItem);
+      });
     }
     
     // Trading Demo Functions
@@ -555,6 +696,7 @@
       const symbolName = currentSymbol.split(':').pop();
       const price = priceInput ? parseFloat(priceInput) : Math.random() * 1000 + 100;
       
+      addTransaction('buy', quantity, price);
       alert(`✅ Buy Order: ${quantity} ${symbolName} at $${price.toFixed(2)}`);
     }
     
@@ -570,6 +712,7 @@
       
       const price = priceInput ? parseFloat(priceInput) : Math.random() * 1000 + 100;
       
+      addTransaction('sell', quantity, price);
       alert(`🔻 Sell Order: ${quantity} ${symbolName} at $${price.toFixed(2)}`);
     }
     
@@ -602,20 +745,14 @@
     
     // Initialize with default symbol
     document.addEventListener('DOMContentLoaded', function() {
+      // Load saved data first
+      loadSavedData();
+      
+      // Initialize TradingView
       initTradingView(currentSymbol);
       
-      // Set up search button click handler
-      document.getElementById('searchButton').addEventListener('click', function() {
-        const symbolInput = document.getElementById('symbolInput');
-        searchSymbol(symbolInput.value);
-      });
-      
-      // Set up Enter key handler for search input
-      document.getElementById('symbolInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          searchSymbol(this.value);
-        }
-      });
+      // Set up theme toggle
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
       
       // Set up trading demo buttons
       document.getElementById('buyButton').addEventListener('click', buyAsset);
